@@ -6,16 +6,19 @@ import eastyle.resourse.maps.FirstMap;
 import eastyle.td.core.logic.Target;
 
 public class TargetController {
-
-	// private static GameZone gameZone;
 	private static int waveLevel = 0;
 	private static Object[] targetInfo;
 
+	/**
+	 * 
+	 */
 	public TargetController() {
-		// TargetController.gameZone = gameZone;
 		sendNewWave();
 	}
 
+	/**
+	 * 
+	 */
 	private static void sendNewWave() {
 		GameActivity.globalScene.unregisterTouchArea(GameZone.gameMap);
 
@@ -29,32 +32,52 @@ public class TargetController {
 		}
 
 		GameActivity.globalScene.registerTouchArea(GameZone.gameMap);
-		
+
 		/* Send Targets */
 		sendTargets();
 	}
 
+	/**
+	 * 
+	 */
 	private static void sendTargets() {
 		new Thread(new Runnable() {
 			public void run() {
-				try {
-					for (Target target : GameZone.globalTargets) {
-						target.go();
-						Thread.sleep(2000);
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				sendTarget(GameZone.globalTargets.size());
 			}
 		}).start();
 	}
 
+	/**
+	 * @param alltargetscount
+	 */
+	private static void sendTarget(int alltargetscount) {
+		try {
+			for (int i = 0; i < alltargetscount; i++) {
+				if (alltargetscount != GameZone.globalTargets.size()) {
+					synchronized (GameZone.globalTargets) {
+						alltargetscount = GameZone.globalTargets.size();
+					}
+					continue;
+				}
+				GameZone.globalTargets.get(i).go();
+				Thread.sleep(2000);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 
+	 */
 	public static void checkTargets() {
-		// if (gameZone.getGameTargets().size() == 0) {
-		// waveLevel++;
-		// if (FirstMap.getTestTargetProperties().length > waveLevel) {
-		// sendNewWave();
-		// }
-		// }
+		if (GameZone.globalTargets.size() == 0) {
+			waveLevel++;
+			if (FirstMap.getTestTargetProperties().length > waveLevel) {
+				sendNewWave();
+			}
+		}
 	}
 }

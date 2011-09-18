@@ -8,6 +8,8 @@ import android.util.Log;
 
 import eastyle.gopdefence.GameActivity;
 import eastyle.gopdefence.shapes.Ellipse;
+import eastyle.gopdefence.view.GameZone;
+import eastyle.td.core.controller.TargetController;
 
 public class Target implements Runnable {
 	public int id;
@@ -72,9 +74,9 @@ public class Target implements Runnable {
 	private void deleteTarget() {
 		isDestroied = true;
 		threadStopFlag = true;
-		// gameZone.getGameTargets().remove(this);
-		// gameZone.removeChild(sp, true);
-		// TargetController.checkTargets();
+		GameZone.globalTargets.remove(this);
+		GameZone.gameMap.detachChild(sp);
+		TargetController.checkTargets();
 	}
 
 	/**

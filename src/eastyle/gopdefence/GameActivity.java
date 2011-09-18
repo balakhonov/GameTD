@@ -14,6 +14,8 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextur
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
 import eastyle.gopdefence.view.GameZone;
+import eastyle.gopdefence.view.GameZoneMenu;
+import eastyle.gopdefence.view.TowersPanelLayer;
 import eastyle.td.core.controller.TargetController;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -37,16 +39,17 @@ public class GameActivity extends BaseGameActivity {
 	// ===========================================================
 
 	/* Global */
-	protected static Camera mCamera;
+	public static Camera mCamera;
 	public static Scene globalScene;
 	protected static Engine engine;
 	protected static GameActivity gameActivity;
 
 	/* texture for test object */
 	public static TextureRegion mFaceTextureRegion;
-
 	/* texture for red tower/target */
 	public static TextureRegion mRedTargetTextureRegion;
+	/* texture for blue tower/target */
+	public static TextureRegion mBlueTargetTextureRegion;
 
 	// ===========================================================
 	// Constructors
@@ -97,10 +100,18 @@ public class GameActivity extends BaseGameActivity {
 		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
 
 		/* texture for red tower/target */
-		mBitmapTextureAtlas = new BitmapTextureAtlas(64, 64,
+		mBitmapTextureAtlas = new BitmapTextureAtlas(256, 128,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		mRedTargetTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mBitmapTextureAtlas, this, "red_tower.png", 0,
+						0);
+		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
+
+		/* texture for red tower/target */
+		mBitmapTextureAtlas = new BitmapTextureAtlas(256, 128,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mBlueTargetTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mBitmapTextureAtlas, this, "blue_tower.png", 0,
 						0);
 		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
 	}
@@ -121,6 +132,9 @@ public class GameActivity extends BaseGameActivity {
 
 		/* Add game map */
 		new GameZone();
+
+		/* Add towers menu */
+		new TowersPanelLayer();
 
 		return globalScene;
 	}

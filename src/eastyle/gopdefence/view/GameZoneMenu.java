@@ -1,4 +1,4 @@
-package eastyle.gopdefence;
+package eastyle.gopdefence.view;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -10,6 +10,8 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
+
+import eastyle.gopdefence.GameActivity;
 
 import android.util.Log;
 
@@ -25,10 +27,10 @@ public class GameZoneMenu extends GameActivity implements
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	protected static MenuScene mMenuScene;
+	public static MenuScene mMenuScene;
 
 
-	protected TextureRegion mMenuResetTextureRegion;
+	protected static TextureRegion mMenuResetTextureRegion;
 	protected TextureRegion mMenuQuitTextureRegion;
 
 	private BitmapTextureAtlas mMenuTexture;
