@@ -13,10 +13,11 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
+
+import eastyle.gopdefence.controller.TargetController;
 import eastyle.gopdefence.view.GameZone;
 import eastyle.gopdefence.view.GameZoneMenu;
 import eastyle.gopdefence.view.TowersPanelLayer;
-import eastyle.td.core.controller.TargetController;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,10 +27,8 @@ public class GameActivity extends BaseGameActivity {
 	// Constants
 	// ===========================================================
 
-	static {
-	}
-	public static int CAMERA_WIDTH = 720;
-	public static int CAMERA_HEIGHT = 480;
+	public static final int CAMERA_WIDTH = 720;
+	public static final int CAMERA_HEIGHT = 480;
 
 	protected static final int MENU_RESET = 0;
 	protected static final int MENU_QUIT = MENU_RESET + 1;
@@ -50,18 +49,6 @@ public class GameActivity extends BaseGameActivity {
 	public static TextureRegion mRedTargetTextureRegion;
 	/* texture for blue tower/target */
 	public static TextureRegion mBlueTargetTextureRegion;
-
-	// ===========================================================
-	// Constructors
-	// ===========================================================
-
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
-
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
 
 	@Override
 	public Engine onLoadEngine() {
@@ -153,7 +140,7 @@ public class GameActivity extends BaseGameActivity {
 		globalScene.setTouchAreaBindingEnabled(true);
 
 		/* add targets */
-		new TargetController();
+		TargetController.sendNewWave();
 
 		/* test object */
 		// final Sprite face = new Sprite(0, 0, this.mFaceTextureRegion);
@@ -216,22 +203,7 @@ public class GameActivity extends BaseGameActivity {
 		// ellipse.setLineWidth(2f);
 		// globalScene.attachChild(ellipse);
 	}
-
-	private float getScreenResolutionRatio() {
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		return ((float) dm.widthPixels) / ((float) dm.heightPixels);
-	}
-
-	// public final Line makeLine(final Point start, final Point end) {
-	// final Line line = new Line((start.x + 0.5f) * 64f,
-	// (start.y + 0.5f) * 64f, (end.x + 0.5f) * 64f,
-	// (end.y + 0.5f) * 64f);
-	// line.setLineWidth(3f);
-	// line.setColor(1f, 0.1f, 0.1f, 0.75f);
-	// return line;
-	// }
-
+	
 	@Override
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pEvent) {
 		Log.i("onKeyDown", "onKeyDown");
@@ -250,5 +222,11 @@ public class GameActivity extends BaseGameActivity {
 		} else {
 			return super.onKeyDown(pKeyCode, pEvent);
 		}
+	}
+
+	private float getScreenResolutionRatio() {
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		return ((float) dm.widthPixels) / ((float) dm.heightPixels);
 	}
 }

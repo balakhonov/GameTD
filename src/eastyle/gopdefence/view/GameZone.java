@@ -8,70 +8,68 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
-
-import android.util.Log;
 import eastyle.gopdefence.GameActivity;
-import eastyle.td.core.logic.Target;
-import eastyle.td.core.logic.Tower;
+import eastyle.gopdefence.controller.TowerController;
+import eastyle.gopdefence.logic.Target;
+import eastyle.gopdefence.logic.Tower;
 
 public class GameZone extends GameActivity {
 	public static ArrayList<Target> globalTargets = new ArrayList<Target>();
+	public static ArrayList<Tower> globalTowers = new ArrayList<Tower>();
 	private BitmapTextureAtlas fMapTexture;
 	private TextureRegion fMapTextureRegions;
 	public static Sprite gameMap;
 	public static float elementSize = 40;
-	public GameZone() {
 
+	public GameZone() {
+		//TODO Move to GameActivity loadRsorses method
 		this.fMapTexture = new BitmapTextureAtlas(512, 512,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.fMapTextureRegions = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(this.fMapTexture, GameActivity.gameActivity,
 						"map1.jpg", 0, 0);
 		engine.getTextureManager().loadTexture(fMapTexture);
-
+		//end
+		
 		gameMap = new Sprite(0, 0, fMapTextureRegions) {
-			float posX = 0;
-			float posY = 0;
-
+			float oldTouchPosX = 0;
+			float oldTouchPosY = 0;
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+
 				if (TowersPanelLayer.is_towerBuildSelect) {
-					Log.i("Add tower on map", "Add tower on map");
-					Tower towerMaket = new Tower(TowersPanelLayer.selectedTower);
-					// if (GoldView.getGold() >= towerMaket.getTowerCoast()) {
-					// GoldView.delGold(towerMaket.getTowerCoast());
-					// //Sprite tower = towerMaket.getTowerSprite();
-					 float x = ((int) (pTouchAreaLocalX / elementSize))
-					 * elementSize;
-					 float y = ((int) (pTouchAreaLocalY / elementSize))
-					 * elementSize;
-					 towerMaket.getTowerSprite().setPosition(x, y);
-					gameMap.attachChild(towerMaket.getTowerSprite());
-					TowersPanelLayer.is_towerBuildSelect = false;
-					// }
+					TowerController.buildTower(pSceneTouchEvent.getAction(),
+							pTouchAreaLocalX, pTouchAreaLocalY);
 				} else {
-					if (Math.abs(posX - pSceneTouchEvent.getX()) > 6
-							&& Math.abs(posY - pSceneTouchEvent.getY()) > 6) {
-						posX = pSceneTouchEvent.getX();
-						posY = pSceneTouchEvent.getY();
-					} else {
+					switch (pSceneTouchEvent.getAction()) {
+					case 2:
+						if (Math.abs(oldTouchPosX - pSceneTouchEvent.getX()) > 22
+								&& Math.abs(oldTouchPosY
+										- pSceneTouchEvent.getY()) > 22) {
+							oldTouchPosX = pSceneTouchEvent.getX();
+							oldTouchPosY = pSceneTouchEvent.getY();
+						} else {
+							oldTouchPosX = this.getX()
+									- (oldTouchPosX - pSceneTouchEvent.getX());
+							oldTouchPosY = this.getY()
+									- (oldTouchPosY - pSceneTouchEvent.getY());
 
-						posX = this.getX() - (posX - pSceneTouchEvent.getX());
-						posY = this.getY() - (posY - pSceneTouchEvent.getY());
-
-						if (posX > -150
-								&& (posX + this.getWidth() - 150) < CAMERA_WIDTH) {
-							this.setPosition(posX, this.getY());
+							if (oldTouchPosX > -150
+									&& (oldTouchPosX + this.getWidth() - 150) < CAMERA_WIDTH) {
+								this.setPosition(oldTouchPosX, this.getY());
+							}
+							if (oldTouchPosY > -150
+									&& (oldTouchPosY + this.getHeight() - 150) < CAMERA_HEIGHT) {
+								this.setPosition(this.getX(), oldTouchPosY);
+							}
+							oldTouchPosX = pSceneTouchEvent.getX();
+							oldTouchPosY = pSceneTouchEvent.getY();
 						}
-						if (posY > -150
-								&& (posY + this.getHeight() - 150) < CAMERA_HEIGHT) {
-							this.setPosition(this.getX(), posY);
-						}
+						break;
 
-						posX = pSceneTouchEvent.getX();
-						posY = pSceneTouchEvent.getY();
-
+					default:
+						break;
 					}
 				}
 				return true;
@@ -79,17 +77,12 @@ public class GameZone extends GameActivity {
 		};
 		globalScene.attachChild(gameMap);
 		globalScene.registerTouchArea(gameMap);
-
 	}
 
 	public void setBackground() {
-		// Sprite land = Sprite.sprite(map.getImageMap()); // background img
-		// land.setAnchorPoint(0, 0);
-		// // land.scale(map.getNewScaleXmapElementSize());
-		// land.setPosition(0, 0);
-		// addChild(land);
-	}
 
+	}
+	
 	public static void addChild(Sprite sprite) {
 		gameMap.attachChild(sprite);
 	}

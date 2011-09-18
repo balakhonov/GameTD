@@ -1,19 +1,14 @@
-package eastyle.td.core.logic;
+package eastyle.gopdefence.logic;
 
-import org.anddev.andengine.entity.modifier.ColorModifier;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.input.touch.TouchEvent;
-
 import android.util.Log;
-
 import eastyle.gopdefence.GameActivity;
-import eastyle.gopdefence.shapes.Ellipse;
-import eastyle.gopdefence.view.GameZone;
-import eastyle.resourse.maps.FirstMap;
-import eastyle.td.core.controller.TowerController;
+import eastyle.gopdefence.controller.TowerController;
+import eastyle.gopdefence.maps.FirstMap;
+import eastyle.gopdefence.view.AttackRadius;
 
-public class Tower implements Runnable {
-	private Sprite tower;
+public class Tower extends Sprite implements Runnable {
 	private boolean isTargetCaptured = false;
 	private Thread thread;
 	/* properties */
@@ -22,62 +17,44 @@ public class Tower implements Runnable {
 	private int attackDamage;
 	private int towerCoast;
 
+	/**
+	 * @param Id Tower index from towers array in FirstMap
+	 */
+	
 	public Tower(int Id) {
+		super(0,0,GameActivity.mBlueTargetTextureRegion);
+		
 		/* Set Tower Propertyes */
 		Object[] towerInfo = FirstMap.getTestTowerProperties()[Id];
-		
 		setAttackDamage((Integer) towerInfo[1]);
 		setAttackRange((Float) towerInfo[2]);
 		setAttackDelay((Integer) towerInfo[3]);
 		setTowerCoast((Integer) towerInfo[4]);
-		tower = new Sprite(0, 0, GameActivity.mBlueTargetTextureRegion) {
+		
+		/* init tower */
+//		tower = new Sprite(0, 0, GameActivity.mBlueTargetTextureRegion) {
+//			/* Click on tower */
+//			@Override
+//			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+//					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+//				Log.i("onAreaTouched", "onAreaTouched");
+//				showRange();
+//				//TODO Show Tower info
+//				//....
+//				// end
+//				return true;
+//			}
+//		};
+		GameActivity.globalScene.registerTouchArea(this);
 
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
-					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				Log.i("onAreaTouched", "onAreaTouched");
-				/* Ellipse test */
-				Ellipse ellipse = new Ellipse(0, 0, 100);
-				ellipse.setColor(0, 255, 0);
-				ellipse.registerEntityModifier(new ColorModifier(30, 0, 255, 100, 200,
-						255, 100));
-				ellipse.setLineWidth(1f);
-				this.attachChild(ellipse);
-				return true;
-			}
-		};
-		GameActivity.globalScene.registerTouchArea(tower);
-
+		/* init main tower Thread */
 		thread = new Thread(this);
 		thread.start();
 	}
 
-	public void animateShot() {
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					tower.setScale(1.4f);
-					Thread.sleep(150);
-					tower.setScale(1.2f);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}).start();
-	}
-
-	public void run() {
-		try {
-			while (!isTargetCaptured()) {
-				if (!isTargetCaptured()) {
-					Log.i("[SEARCHING]", "Tower searching target");
-					new TowerController().searchTarget(this);
-				}
-				Thread.sleep(200);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void showRange() {
+		attachChild(new AttackRadius(getWidth(),getHeight(), attackRange).getAttackRadiusObject());
+		Log.i("showRange", "" + getChildCount());
 	}
 
 	public int getAttackDamage() {
@@ -123,11 +100,28 @@ public class Tower implements Runnable {
 		this.towerCoast = towerCoast;
 	}
 
-	public Sprite getTowerSprite() {
-		return tower;
+	public void run() {
+		try {
+			while (!isTargetCaptured()) {
+				if (!isTargetCaptured()) {
+					// Log.i("[SEARCHING]", "Tower searching target");
+					new TowerController().searchTarget(this);
+				}
+				Thread.sleep(200);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
-	public void activate() {
-		thread.run();
+	
+	@Override
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+			final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+		Log.i("onAreaTouched", "onAreaTouched");
+		showRange();
+		//TODO Show Tower info
+		//....
+		// end
+		return true;
 	}
 }

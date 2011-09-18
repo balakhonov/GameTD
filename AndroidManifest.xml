@@ -4,7 +4,7 @@
 	<uses-sdk android:minSdkVersion="8" />
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
-		<activity android:name="eastyle.gopdefence.GameActivity"
+		<activity android:name=".GameActivity"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package eastyle.resourse.maps;
+package eastyle.gopdefence.maps;
 
 public class FirstMap {
 	private String imageMap = "map1.jpg";
@@ -15,12 +15,12 @@ public class FirstMap {
 		new Object[] { "blue_tower.png", new Integer(10), new Float(100), new Integer(300), new Integer(35) },
 		new Object[] { "blue_tower.png", new Integer(5), new Float(100), new Integer(300), new Integer(20) } };
 
-	/* Targets img, speed, heals, coast, count */
+	/* Targets img, speed, heals, coast, count, delay */
 	private static Object[][] testTargetProperties = {
-		new Object[] { "red_tower.png", new Integer(110), new Integer(300), new Integer(5), new Integer(10) },
-		new Object[] { "red_tower.png", new Integer(110), new Integer(500), new Integer(10), new Integer(20) },
-		new Object[] { "red_tower.png", new Integer(110), new Integer(700), new Integer(15), new Integer(15) },
-		new Object[] { "red_tower.png", new Integer(110), new Integer(1500), new Integer(20), new Integer(15) } };
+		new Object[] { "red_tower.png", new Integer(110), new Integer(300), new Integer(5), new Integer(25), new Integer(200)  },
+		new Object[] { "red_tower.png", new Integer(110), new Integer(500), new Integer(10), new Integer(25), new Integer(200)  },
+		new Object[] { "red_tower.png", new Integer(110), new Integer(700), new Integer(15), new Integer(25), new Integer(1000)  },
+		new Object[] { "red_tower.png", new Integer(110), new Integer(1500), new Integer(20), new Integer(5), new Integer(1000)  } };
 	public FirstMap() {
 
 	}
