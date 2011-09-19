@@ -1,7 +1,9 @@
 package eastyle.gopdefence.controller;
 
+import org.anddev.andengine.entity.IEntity;
 import eastyle.gopdefence.GameActivity;
 import eastyle.gopdefence.logic.Target;
+import eastyle.gopdefence.logic.Tower;
 import eastyle.gopdefence.maps.FirstMap;
 import eastyle.gopdefence.view.GameZone;
 
@@ -61,17 +63,32 @@ public class TargetController {
 	 */
 	public static void checkTargets() {
 		if (targetsCount == 0) {
+			
+			for (Tower tower : GameZone.globalTowers) {
+				while(tower.isTargetCaptured()) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
 			GameZone.globalTargets.clear();
 			for (Target target : GameZone.globalTargets) {
 				GameZone.gameMap.detachChild(target);
+			}
+			GameZone.globalProjectile.clear();
+			for (IEntity projectile : GameZone.globalProjectile) {
+				GameZone.gameMap.detachChild(projectile);
 			}
 			waveLevel++;
 			if (waveLevel < FirstMap.getTestTargetProperties().length) {
 				sendNewWave();
 			} else {
 				// TODO Show message "You win!";
-				//...
-				//end
+				// ...
+				// end
 			}
 		}
 	}

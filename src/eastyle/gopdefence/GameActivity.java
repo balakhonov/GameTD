@@ -98,8 +98,8 @@ public class GameActivity extends BaseGameActivity {
 		mBitmapTextureAtlas = new BitmapTextureAtlas(256, 128,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		mBlueTargetTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mBitmapTextureAtlas, this, "blue_tower.png", 0,
-						0);
+				.createFromAsset(mBitmapTextureAtlas, this, "blue_tower.png",
+						0, 0);
 		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
 	}
 
@@ -203,7 +203,7 @@ public class GameActivity extends BaseGameActivity {
 		// ellipse.setLineWidth(2f);
 		// globalScene.attachChild(ellipse);
 	}
-	
+
 	@Override
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pEvent) {
 		Log.i("onKeyDown", "onKeyDown");

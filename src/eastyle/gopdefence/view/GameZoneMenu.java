@@ -47,7 +47,7 @@ public class GameZoneMenu extends GameActivity implements
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		Log.i("BitmapTexture", mMenuTexture + " | " + this);
 
-		this.mMenuResetTextureRegion = BitmapTextureAtlasTextureRegionFactory
+		mMenuResetTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mMenuTexture, GameActivity.gameActivity, "menu_reset.png", 0,
 						0);
 		this.mMenuQuitTextureRegion = BitmapTextureAtlasTextureRegionFactory
@@ -60,7 +60,7 @@ public class GameZoneMenu extends GameActivity implements
 		 mMenuScene = new MenuScene(GameActivity.mCamera, this);
 		
 		 final SpriteMenuItem resetMenuItem = new SpriteMenuItem(MENU_RESET,
-		 this.mMenuResetTextureRegion);
+		 mMenuResetTextureRegion);
 		 resetMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA,
 		 GL10.GL_ONE_MINUS_SRC_ALPHA);
 		 mMenuScene.addMenuItem(resetMenuItem);

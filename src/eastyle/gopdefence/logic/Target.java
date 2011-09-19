@@ -64,14 +64,14 @@ public class Target extends Sprite implements Runnable {
 		// end
 		deleteTarget();
 	}
-
-	public float getPositionX() {
-		return startX;
-	}
-
-	public float getPositionY() {
-		return startY;
-	}
+//
+//	public float getPositionX() {
+//		return startX;
+//	}
+//
+//	public float getPositionY() {
+//		return startY;
+//	}
 
 	public void go() {
 		thread = new Thread(this);

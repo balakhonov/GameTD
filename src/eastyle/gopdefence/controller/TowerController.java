@@ -1,5 +1,7 @@
 package eastyle.gopdefence.controller;
 
+import org.anddev.andengine.entity.sprite.Sprite;
+
 import android.util.Log;
 import eastyle.gopdefence.GameActivity;
 import eastyle.gopdefence.logic.Target;
@@ -23,7 +25,7 @@ public class TowerController {
 		try {
 			Thread.sleep(100);
 			for (Target target : GameZone.globalTargets) {
-				if (!target.isDestroied) {
+				if (!target.isDestroied && target.isVisible()) {
 					distance = getDistance(tower, target);
 					if (distance < tower.getAttackRange()) {
 						AttackTarget.attackTarget(target, tower);
@@ -46,10 +48,10 @@ public class TowerController {
 	 *            Link to the target
 	 * @return distance
 	 */
-	public static float getDistance(final Tower aTtower, final Target aTarget) {
+	public synchronized static float getDistance(final Sprite aTtower, final Sprite aTarget) {
 		return (float) Math.sqrt(Math.pow(
-				(aTtower.getX() - aTarget.getPositionX()), 2)
-				+ Math.pow((aTtower.getY() - aTarget.getPositionY()), 2));
+				(aTtower.getX() - aTarget.getX()), 2)
+				+ Math.pow((aTtower.getY() - aTarget.getY()), 2));
 	}
 	
 	public static void buildTower(int action, float pTouchAreaLocalX, float pTouchAreaLocalY) {

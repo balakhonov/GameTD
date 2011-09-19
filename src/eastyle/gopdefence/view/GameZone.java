@@ -2,6 +2,7 @@ package eastyle.gopdefence.view;
 
 import java.util.ArrayList;
 
+import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.TextureOptions;
@@ -16,9 +17,10 @@ import eastyle.gopdefence.logic.Tower;
 public class GameZone extends GameActivity {
 	public static ArrayList<Target> globalTargets = new ArrayList<Target>();
 	public static ArrayList<Tower> globalTowers = new ArrayList<Tower>();
+	public static ArrayList<IEntity> globalProjectile = new ArrayList<IEntity>();
 	private BitmapTextureAtlas fMapTexture;
 	private TextureRegion fMapTextureRegions;
-	public static Sprite gameMap;
+	public static volatile Sprite gameMap;
 	public static float elementSize = 40;
 
 	public GameZone() {
@@ -33,7 +35,8 @@ public class GameZone extends GameActivity {
 		
 		gameMap = new Sprite(0, 0, fMapTextureRegions) {
 			float oldTouchPosX = 0;
-			float oldTouchPosY = 0;
+			float oldTouchPosY = 0;			
+			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {

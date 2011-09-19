@@ -16,6 +16,7 @@ public class Tower extends Sprite implements Runnable {
 	private float attackRange;
 	private int attackDamage;
 	private int towerCoast;
+	private int towerAttackType;
 
 	/**
 	 * @param Id Tower index from towers array in FirstMap
@@ -30,6 +31,7 @@ public class Tower extends Sprite implements Runnable {
 		setAttackRange((Float) towerInfo[2]);
 		setAttackDelay((Integer) towerInfo[3]);
 		setTowerCoast((Integer) towerInfo[4]);
+		setTowerAttackType((Integer) towerInfo[5]);
 		
 		/* init tower */
 //		tower = new Sprite(0, 0, GameActivity.mBlueTargetTextureRegion) {
@@ -123,5 +125,13 @@ public class Tower extends Sprite implements Runnable {
 		//....
 		// end
 		return true;
+	}
+
+	public int getTowerAttackType() {
+		return towerAttackType;
+	}
+
+	public void setTowerAttackType(int towerAttackType) {
+		this.towerAttackType = towerAttackType;
 	}
 }

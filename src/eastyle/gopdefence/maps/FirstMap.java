@@ -8,19 +8,19 @@ public class FirstMap {
 	private float newScaleXmapElementSize = 1.0f;
 	private float mapElementSize = 40.0f;
 	private static int waveLevel = 1;
-	/* Towers img, attck, range, delay, coast */
+	/* Towers img, attck, range, delay, coast, attackType */
 	private static Object[][] testTowerProperties = {
-		new Object[] { "blue_tower.png", new Integer(25), new Float(100), new Integer(300), new Integer(100) },
-		new Object[] { "blue_tower.png", new Integer(15), new Float(100), new Integer(300), new Integer(65) },
-		new Object[] { "blue_tower.png", new Integer(10), new Float(100), new Integer(300), new Integer(35) },
-		new Object[] { "blue_tower.png", new Integer(5), new Float(100), new Integer(300), new Integer(20) } };
+		new Object[] { "blue_tower.png", new Integer(20), new Float(100), new Integer(300), new Integer(100), new Integer(0)},
+		new Object[] { "blue_tower.png", new Integer(15), new Float(100), new Integer(300), new Integer(65), new Integer(1) },
+		new Object[] { "blue_tower.png", new Integer(10), new Float(100), new Integer(600), new Integer(35) , new Integer(2)},
+		new Object[] { "blue_tower.png", new Integer(5), new Float(100), new Integer(300), new Integer(20) , new Integer(3)} };
 
-	/* Targets img, speed, heals, coast, count, delay */
+	/* Targets img, speed, heals, coast, count, delay */ 
 	private static Object[][] testTargetProperties = {
-		new Object[] { "red_tower.png", new Integer(110), new Integer(300), new Integer(5), new Integer(25), new Integer(200)  },
-		new Object[] { "red_tower.png", new Integer(110), new Integer(500), new Integer(10), new Integer(25), new Integer(200)  },
-		new Object[] { "red_tower.png", new Integer(110), new Integer(700), new Integer(15), new Integer(25), new Integer(1000)  },
-		new Object[] { "red_tower.png", new Integer(110), new Integer(1500), new Integer(20), new Integer(5), new Integer(1000)  } };
+		new Object[] { "red_tower.png", new Integer(110), new Integer(200), new Integer(5), new Integer(10), new Integer(1100)  },
+		new Object[] { "red_tower.png", new Integer(110), new Integer(500), new Integer(10), new Integer(25), new Integer(1300)  },
+		new Object[] { "red_tower.png", new Integer(110), new Integer(700), new Integer(15), new Integer(25), new Integer(1200)  },
+		new Object[] { "red_tower.png", new Integer(110), new Integer(1500), new Integer(20), new Integer(5), new Integer(1200)  } };
 	public FirstMap() {
 
 	}
