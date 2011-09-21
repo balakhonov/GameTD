@@ -1,5 +1,7 @@
 package eastyle.gopdefence.model;
 
+import java.util.Random;
+
 import eastyle.gopdefence.logic.Target;
 import eastyle.gopdefence.logic.Tower;
 import eastyle.gopdefence.model.attack.MassPointAttack;
@@ -14,9 +16,10 @@ public class AttackTarget {
 
 			while (tower.isTargetCaptured()) {
 				/* anomate shot */
-				tower.setScale(1.4f);
+				tower.animate(150);
+				//tower.setScale(1.4f);
 				Thread.sleep(150);
-				tower.setScale(1);
+				//tower.setScale(1);
 
 				switch (tower.getTowerAttackType()) {
 				case 0:
@@ -32,6 +35,7 @@ public class AttackTarget {
 					break;
 				}
 
+				tower.stopAnimation();
 				Thread.sleep(tower.getAttackDelay());
 			}
 

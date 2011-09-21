@@ -13,6 +13,7 @@ import eastyle.gopdefence.GameActivity;
 import eastyle.gopdefence.controller.TowerController;
 import eastyle.gopdefence.logic.Target;
 import eastyle.gopdefence.logic.Tower;
+import eastyle.gopdefence.maps.FirstMap;
 
 public class GameZone extends GameActivity {
 	public static ArrayList<Target> globalTargets = new ArrayList<Target>();
@@ -24,19 +25,19 @@ public class GameZone extends GameActivity {
 	public static float elementSize = 40;
 
 	public GameZone() {
-		//TODO Move to GameActivity loadRsorses method
-		this.fMapTexture = new BitmapTextureAtlas(512, 512,
+		// TODO Move to GameActivity loadRsorses method
+		this.fMapTexture = new BitmapTextureAtlas(1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.fMapTextureRegions = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(this.fMapTexture, GameActivity.gameActivity,
-						"map1.jpg", 0, 0);
+						FirstMap.imageMap, 0, 0); // 20x12
 		engine.getTextureManager().loadTexture(fMapTexture);
-		//end
-		
+		// end
+
 		gameMap = new Sprite(0, 0, fMapTextureRegions) {
 			float oldTouchPosX = 0;
-			float oldTouchPosY = 0;			
-			
+			float oldTouchPosY = 0;
+
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
@@ -82,10 +83,10 @@ public class GameZone extends GameActivity {
 		globalScene.registerTouchArea(gameMap);
 	}
 
-	public void setBackground() {
-
+	public static float getMarshrutPointCoordinate(int x, int y) {
+		return FirstMap.marshrut[x][y] * FirstMap.mapElementSize;
 	}
-	
+
 	public static void addChild(Sprite sprite) {
 		gameMap.attachChild(sprite);
 	}

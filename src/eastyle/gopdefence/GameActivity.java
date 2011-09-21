@@ -8,10 +8,13 @@ import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolic
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.entity.util.FPSLogger;
+import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
+import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
+import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
 
 import eastyle.gopdefence.controller.TargetController;
@@ -49,6 +52,9 @@ public class GameActivity extends BaseGameActivity {
 	public static TextureRegion mRedTargetTextureRegion;
 	/* texture for blue tower/target */
 	public static TextureRegion mBlueTargetTextureRegion;
+	public static TiledTextureRegion mPlantTextureRegion1;
+	public static TiledTextureRegion mPlantTextureRegion2;
+	public static TiledTextureRegion mPlantTextureRegion3;
 
 	@Override
 	public Engine onLoadEngine() {
@@ -101,6 +107,54 @@ public class GameActivity extends BaseGameActivity {
 				.createFromAsset(mBitmapTextureAtlas, this, "blue_tower.png",
 						0, 0);
 		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
+
+		/* texture for plant 1 */
+		mBitmapTextureAtlas = new BitmapTextureAtlas(256, 64,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mPlantTextureRegion1 = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mBitmapTextureAtlas, gameActivity,
+						"17_s.png", 0, 0, 3, 1);
+		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
+
+		/* texture for plant 2 */
+		mBitmapTextureAtlas = new BitmapTextureAtlas(256, 64,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mPlantTextureRegion2 = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mBitmapTextureAtlas, gameActivity,
+						"11_s.png", 0, 0, 3, 1);
+		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
+
+		/* texture for plant 3 */
+		mBitmapTextureAtlas = new BitmapTextureAtlas(512, 64,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mPlantTextureRegion3 = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mBitmapTextureAtlas, gameActivity,
+						"3.png", 0, 0, 4, 1);
+		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
+
+		// mBitmapTextureAtlas = new BitmapTextureAtlas(256, 128,
+		// TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		// this.mTexture = new TextureRegion(512, 512,
+		// TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		// //mPlantTextureRegion = TextureRegionFactory.createTiledFromAsset(
+		// this.mTexture, this, "funny_face.png", 0, 0, 2, 2);
+		// mPlantTextureRegion = BitmapTextureAtlasTextureRegionFactory
+		// .createFromAsset(mBitmapTextureAtlas, this, "17_s.png",
+		// 0, 0);
+		engine.getTextureManager().loadTexture(mBitmapTextureAtlas);
+	}
+
+	public static TiledTextureRegion loadNewTowerTexture(int type) {
+		switch (type) {
+		case 0:
+			return mPlantTextureRegion1.deepCopy();
+		case 1:
+			return mPlantTextureRegion2.deepCopy();
+		case 2:
+			return mPlantTextureRegion3.deepCopy();
+		}
+		return mPlantTextureRegion1;
+
 	}
 
 	@SuppressWarnings("deprecation")

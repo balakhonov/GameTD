@@ -5,6 +5,8 @@ import org.anddev.andengine.input.touch.TouchEvent;
 import android.util.Log;
 import eastyle.gopdefence.GameActivity;
 import eastyle.gopdefence.controller.TargetController;
+import eastyle.gopdefence.maps.FirstMap;
+import eastyle.gopdefence.view.GameZone;
 
 public class Target extends Sprite implements Runnable {
 	public int id;
@@ -64,14 +66,15 @@ public class Target extends Sprite implements Runnable {
 		// end
 		deleteTarget();
 	}
-//
-//	public float getPositionX() {
-//		return startX;
-//	}
-//
-//	public float getPositionY() {
-//		return startY;
-//	}
+
+	//
+	// public float getPositionX() {
+	// return startX;
+	// }
+	//
+	// public float getPositionY() {
+	// return startY;
+	// }
 
 	public void go() {
 		thread = new Thread(this);
@@ -116,16 +119,13 @@ public class Target extends Sprite implements Runnable {
 
 	public void run() {
 		showTarget();
-		final float[][] marshrut = { { 400.0f, 400.0f }, { 100.0f, 400.0f },
-				{ 50.0f, 200.0f }, { 50.0f, 200.0f }, { 50.0f, 100.0f },
-				{ 200.0f, 100.0f }, { 0, 0 } };
 
-		float endX = marshrut[1][0];
-		float endY = marshrut[1][1];
-		startX = marshrut[0][0];
-		startY = marshrut[0][1];
+		float endX = GameZone.getMarshrutPointCoordinate(1, 0);
+		float endY = GameZone.getMarshrutPointCoordinate(1, 1);
+		startX = GameZone.getMarshrutPointCoordinate(0, 0);
+		startY = GameZone.getMarshrutPointCoordinate(0, 1);
 		int pointIndex = 1;
-		int points = marshrut.length;
+		int points = FirstMap.marshrut.length;
 		float exitEndYH = endY + step;
 		float exitEndYL = endY - step;
 		float exitEndXH = endX + step;
@@ -166,11 +166,13 @@ public class Target extends Sprite implements Runnable {
 						break;
 					}
 					pointIndex++;
-					startX = marshrut[pointIndex - 1][0];
-					startY = marshrut[pointIndex - 1][1];
+					startX = GameZone.getMarshrutPointCoordinate(
+							pointIndex - 1, 0);
+					startY = GameZone.getMarshrutPointCoordinate(
+							pointIndex - 1, 1);
 
-					endX = marshrut[pointIndex][0];
-					endY = marshrut[pointIndex][1];
+					endX = GameZone.getMarshrutPointCoordinate(pointIndex, 0);
+					endY = GameZone.getMarshrutPointCoordinate(pointIndex, 1);
 					exitEndYH = endY + step;
 					exitEndYL = endY - step;
 					exitEndXH = endX + step;

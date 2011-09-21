@@ -1,14 +1,17 @@
 package eastyle.gopdefence.logic;
 
+import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.input.touch.TouchEvent;
+import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
+
 import android.util.Log;
 import eastyle.gopdefence.GameActivity;
 import eastyle.gopdefence.controller.TowerController;
 import eastyle.gopdefence.maps.FirstMap;
 import eastyle.gopdefence.view.AttackRadius;
 
-public class Tower extends Sprite implements Runnable {
+public class Tower extends AnimatedSprite implements Runnable {
 	private boolean isTargetCaptured = false;
 	private Thread thread;
 	/* properties */
@@ -23,7 +26,10 @@ public class Tower extends Sprite implements Runnable {
 	 */
 	
 	public Tower(int Id) {
-		super(0,0,GameActivity.mBlueTargetTextureRegion);
+		super(0, 0, 50, 50, GameActivity.loadNewTowerTexture(Id));
+//		AnimatedSprite mAnimatedSprite = new AnimatedSprite(300, 100, (TiledTextureRegion) GameActivity.mPlantTextureRegion );
+//		//Включаем простую последовательную анимацию с частотой 100 мсек.
+//		mAnimatedSprite.animate(100);
 		
 		/* Set Tower Propertyes */
 		Object[] towerInfo = FirstMap.getTestTowerProperties()[Id];
