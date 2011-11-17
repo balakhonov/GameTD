@@ -5,22 +5,25 @@ import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.engine.options.EngineOptions;
 import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
 import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.anddev.andengine.entity.primitive.Line;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
-import org.anddev.andengine.entity.util.FPSLogger;
+import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
-import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
-
 import eastyle.gopdefence.controller.TargetController;
+import eastyle.gopdefence.controller.WaveController;
+import eastyle.gopdefence.maps.FirstMap;
 import eastyle.gopdefence.view.GameZone;
 import eastyle.gopdefence.view.GameZoneMenu;
 import eastyle.gopdefence.view.TowersPanelLayer;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -46,6 +49,8 @@ public class GameActivity extends BaseGameActivity {
 	protected static Engine engine;
 	protected static GameActivity gameActivity;
 
+	public static Texture mFontTexture;
+	public static Font mFont;
 	/* texture for test object */
 	public static TextureRegion mFaceTextureRegion;
 	/* texture for red tower/target */
@@ -59,18 +64,7 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	public Engine onLoadEngine() {
 		Log.i("onLoadEngine", "onLoadEngine");
-
-		/* GET SCREEN SIZE */
-		/*
-		 * WindowManager w = getWindowManager(); Display d =
-		 * w.getDefaultDisplay(); DisplayMetrics metrics = new DisplayMetrics();
-		 * d.getMetrics(metrics); CAMERA_WIDTH = d.getWidth(); CAMERA_HEIGHT =
-		 * d.getHeight(); Log.i("DisplayMetrics", CAMERA_WIDTH + " | " +
-		 * CAMERA_HEIGHT);
-		 */
-
 		gameActivity = this;
-
 		mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		final EngineOptions options = new EngineOptions(true,
 				ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(
@@ -83,6 +77,15 @@ public class GameActivity extends BaseGameActivity {
 		Log.i("onLoadResources", "onLoadResources");
 		engine = this.mEngine;
 		BitmapTextureAtlas mBitmapTextureAtlas;
+
+		/* texture for text Font */
+		// this.mFontTexture = new Texture(new PixelFormat());
+		mFontTexture = new BitmapTextureAtlas(256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mFont = new Font(mFontTexture, Typeface.create(Typeface.DEFAULT,
+				Typeface.BOLD), 48, true, Color.BLACK);
+		engine.getTextureManager().loadTexture(mFontTexture);
+		engine.getFontManager().loadFont(mFont);
 
 		/* texture for test object */
 		mBitmapTextureAtlas = new BitmapTextureAtlas(64, 64,
@@ -161,22 +164,24 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	public Scene onLoadScene() {
 		/* FPSLogger in console */
-		this.mEngine.registerUpdateHandler(new FPSLogger());
+		// this.mEngine.registerUpdateHandler(new FPSLogger());
 
 		/* Create Global Scene */
 		globalScene = new Scene(3);
+		/* Scene BackGround */
 		globalScene.setBackground(new ColorBackground(0.09804f, 0.6274f,
 				0.8784f));
 
 		/* Attach gameZone menu */
 		new GameZoneMenu();
 
-		/* Add game map */
+		/* Attach game map */
 		new GameZone();
 
-		/* Add towers menu */
+		/* Attach towers menu */
 		new TowersPanelLayer();
 
+		new WaveController();
 		return globalScene;
 	}
 
@@ -194,9 +199,11 @@ public class GameActivity extends BaseGameActivity {
 		globalScene.setTouchAreaBindingEnabled(true);
 
 		/* add targets */
-		TargetController.sendNewWave();
+		//TargetController.sendNewWave();
 
 		/* test object */
+		showMapGrid();
+		
 		// final Sprite face = new Sprite(0, 0, this.mFaceTextureRegion);
 		// face.registerEntityModifier(new MoveModifier(5, 0, CAMERA_WIDTH
 		// - face.getWidth(), 0, CAMERA_HEIGHT - face.getHeight()));
@@ -235,14 +242,7 @@ public class GameActivity extends BaseGameActivity {
 		// face2.setScale(4);
 		// globalScene.attachChild(face2);
 		// globalScene.registerTouchArea(face2);
-
-		/* test line */
-		// final Line line = new Line(0f, 0f, 500f, 500f);
-		// line.setColor(255f, 200f, 0, 50f);
-		// line.setLineWidth(50f);
-		// line.registerEntityModifier(new MoveByModifier(20, 500, 500));
-		// globalScene.attachChild(line);
-
+		
 		/* test Rectangle */
 		// Rectangle baseRectangle = new Rectangle(0, 0, 100, 100);
 		// baseRectangle.setColor(0, 200, 255);
@@ -258,9 +258,36 @@ public class GameActivity extends BaseGameActivity {
 		// globalScene.attachChild(ellipse);
 	}
 
+	private void showMapGrid() {
+		Log.i("mapW mapH",
+				GameZone.gameMap.getWidth() + "|"
+						+ GameZone.gameMap.getHeight());
+		float mapElementSize = FirstMap.mapElementSize;
+		for (int i = 0; i < GameZone.gameMap.getWidth() / mapElementSize; i++) {
+			// Log.i("Line", "|");
+			final Line line = new Line((float) i * mapElementSize, 0f,
+					(float) i * mapElementSize, GameZone.gameMap.getHeight());
+			line.setColor(255f, 200f, 0, 50f);
+			line.setLineWidth(2f);
+			// line.registerEntityModifier(new MoveByModifier(20, 500, 500));
+			GameZone.gameMap.attachChild(line);
+		}
+		for (int i = 0; i < GameZone.gameMap.getHeight() / mapElementSize; i++) {
+			// Log.i("Line", "|");
+			final Line line = new Line(0f, (float) i * mapElementSize,
+					GameZone.gameMap.getWidth(), (float) i * mapElementSize);
+			line.setColor(255f, 200f, 0, 50f);
+			line.setLineWidth(2f);
+			// line.registerEntityModifier(new MoveByModifier(20, 500, 500));
+			GameZone.gameMap.attachChild(line);
+		}
+		
+	}
+
 	@Override
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pEvent) {
-		Log.i("onKeyDown", "onKeyDown");
+		Log.i("onKeyDown", "onKeyDown " + pEvent.getAction());
+
 		if (pKeyCode == KeyEvent.KEYCODE_MENU
 				&& pEvent.getAction() == KeyEvent.ACTION_DOWN) {
 			Log.i("onKeyDown", "onKeyDown");
@@ -282,5 +309,19 @@ public class GameActivity extends BaseGameActivity {
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		return ((float) dm.widthPixels) / ((float) dm.heightPixels);
+	}
+
+	public static void restartMap() {
+		// Clear Threads
+
+		// Clear Objects
+		// Clear Counts
+		TargetController.resetWaveLevel();
+
+		/* Restart the animation. */
+		// globalScene.reset();
+
+		/* Remove the menu and reset it. */
+		// globalScene.clearChildScene();
 	}
 }

@@ -12,6 +12,7 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextur
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 
 import eastyle.gopdefence.GameActivity;
+import eastyle.gopdefence.controller.TargetController;
 
 import android.util.Log;
 
@@ -82,12 +83,14 @@ public class GameZoneMenu extends GameActivity implements
 		Log.i("Click", "Click2");
 		switch (pMenuItem.getID()) {
 		case MENU_RESET:
+			//GameActivity.restartMap();
 			/* Restart the animation. */
-			GameActivity.globalScene.reset();
+			//GameActivity.globalScene.reset();
 
 			/* Remove the menu and reset it. */
 			GameActivity.globalScene.clearChildScene();
 			mMenuScene.reset();
+			GameZone.restartMap();
 			return true;
 		case MENU_QUIT:
 			/* End Activity. */

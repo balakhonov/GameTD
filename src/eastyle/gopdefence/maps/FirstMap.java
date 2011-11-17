@@ -13,16 +13,17 @@ public class FirstMap {
 			new Object[] { "blue_tower.png", new Integer(20), new Float(100),
 					new Integer(300), new Integer(100), new Integer(0) },
 			new Object[] { "blue_tower.png", new Integer(15), new Float(100),
-					new Integer(300), new Integer(65), new Integer(1) },
+					new Integer(300), new Integer(150), new Integer(1) },
 			new Object[] { "blue_tower.png", new Integer(10), new Float(100),
-					new Integer(600), new Integer(35), new Integer(2) },
+					new Integer(600), new Integer(50), new Integer(2) },
 			new Object[] { "blue_tower.png", new Integer(5), new Float(100),
-					new Integer(300), new Integer(20), new Integer(3) } };
+					new Integer(300), new Integer(100), new Integer(3) } };
 
 	/* Targets img, speed, heals, coast, count, delay */
 	private static Object[][] testTargetProperties = {
 			new Object[] { "red_tower.png", new Integer(70), new Integer(200),
 					new Integer(5), new Integer(10), new Integer(2000) },
+					
 			new Object[] { "red_tower.png", new Integer(80), new Integer(500),
 					new Integer(10), new Integer(25), new Integer(3000) },
 			new Object[] { "red_tower.png", new Integer(80), new Integer(700),

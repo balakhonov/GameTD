@@ -10,7 +10,9 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import eastyle.gopdefence.GameActivity;
+import eastyle.gopdefence.controller.TargetController;
 import eastyle.gopdefence.controller.TowerController;
+import eastyle.gopdefence.controller.WaveController;
 import eastyle.gopdefence.logic.Target;
 import eastyle.gopdefence.logic.Tower;
 import eastyle.gopdefence.maps.FirstMap;
@@ -23,6 +25,36 @@ public class GameZone extends GameActivity {
 	private TextureRegion fMapTextureRegions;
 	public static volatile Sprite gameMap;
 	public static float elementSize = 40;
+	// Using for destroy all threads
+	public static boolean isDestroy = false;
+	// Using for pause all threads
+	public static boolean isPause = true;
+	// speed flag 1x 2x 3x 4x 8x
+	public static int gameSpeed = 1;
+	// Change when speed changing
+	public static boolean speedShange = true;
+
+	public static void nextSpeed() {
+		try {
+			isPause = true;
+			Thread.sleep(200);
+			speedShange = !speedShange;
+			gameSpeed = (gameSpeed == 8) ? 1 : gameSpeed * 2;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		isPause = false;
+	}
+
+	public static void isPause() {
+		while (isPause) {
+			try {
+				Thread.sleep(7);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public GameZone() {
 		// TODO Move to GameActivity loadRsorses method
@@ -71,7 +103,8 @@ public class GameZone extends GameActivity {
 							oldTouchPosY = pSceneTouchEvent.getY();
 						}
 						break;
-
+					case 1:
+						AttackRadius.hideRadius();
 					default:
 						break;
 					}
@@ -81,6 +114,7 @@ public class GameZone extends GameActivity {
 		};
 		globalScene.attachChild(gameMap);
 		globalScene.registerTouchArea(gameMap);
+		
 	}
 
 	public static float getMarshrutPointCoordinate(int x, int y) {
@@ -89,5 +123,20 @@ public class GameZone extends GameActivity {
 
 	public static void addChild(Sprite sprite) {
 		gameMap.attachChild(sprite);
+	}
+
+	public static void restartMap() {
+		// destroy all objects
+		for (Target target : GameZone.globalTargets) {
+			target.destroyTarget();
+		}
+		//
+		// GameZone.globalTargets.clear();
+		// GameZone.globalTowers.clear();
+		gameSpeed = 1;
+		isPause = true;
+		GoldView.resetGold();
+		TargetController.resetWaveLevel();
+		TargetController.sendNewWave();
 	}
 }

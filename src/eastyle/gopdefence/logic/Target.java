@@ -7,10 +7,10 @@ import eastyle.gopdefence.GameActivity;
 import eastyle.gopdefence.controller.TargetController;
 import eastyle.gopdefence.maps.FirstMap;
 import eastyle.gopdefence.view.GameZone;
+import eastyle.gopdefence.view.GoldView;
 
 public class Target extends Sprite implements Runnable {
 	public int id;
-	// public final Sprite targetSprite;
 	// private Label labelHeals;
 	private float startX;
 	private float startY;
@@ -27,8 +27,8 @@ public class Target extends Sprite implements Runnable {
 		super(0, 0, GameActivity.mRedTargetTextureRegion);
 		hideTarget();
 		speed = (Integer) targetInfo[1];
-		heals = (Integer) targetInfo[2];
-		coast = (Integer) targetInfo[3];
+		heals = (Integer) targetInfo[2] * TargetController.difficult;
+		coast = (Integer) targetInfo[3] * TargetController.difficult;
 		GameActivity.globalScene.registerTouchArea(this);
 
 		// TODO realise healse view element
@@ -42,7 +42,13 @@ public class Target extends Sprite implements Runnable {
 	public synchronized void killTarget() {
 		if (!isDestroied) {
 			deleteTarget();
-			// GoldView.addGold(coast);
+			GoldView.addGold(coast);
+		}
+	}
+
+	public synchronized void destroyTarget() {
+		if (!isDestroied) {
+			deleteTarget();
 		}
 	}
 
@@ -54,7 +60,7 @@ public class Target extends Sprite implements Runnable {
 		threadStopFlag = true;
 		TargetController.targetsCount--;
 		hideTarget();
-		TargetController.checkTargets();
+		//TargetController.checkTargets();
 	}
 
 	/**
@@ -132,8 +138,11 @@ public class Target extends Sprite implements Runnable {
 		float exitEndXL = endX - step;
 		while (true) {
 			try {
+				if (GameZone.isDestroy)
+					break;
 				if (threadStopFlag)
 					break;
+
 				if (startX > endX) {
 					startX = startX - step;
 					setPosition(startX, startY);
@@ -152,10 +161,6 @@ public class Target extends Sprite implements Runnable {
 					startY = startY + step;
 					setPosition(startX, startY);
 				}
-
-				Thread.sleep(speed);
-				if (threadStopFlag)
-					break;
 
 				if (startY < exitEndYH && startY > exitEndYL
 						&& startX < exitEndXH && startX > exitEndXL) {
@@ -178,9 +183,20 @@ public class Target extends Sprite implements Runnable {
 					exitEndXH = endX + step;
 					exitEndXL = endX - step;
 				}
+				// Sleep thread
+				int sleepStep = 0;
+				while (sleepStep < (speed)) {
+					GameZone.isPause();
+					sleepStep += 7 * GameZone.gameSpeed;
+					Thread.sleep(7);
+				}
 			} catch (InterruptedException e) {
 			}
 		}
+
+	}
+
+	public void nextStep() {
 
 	}
 

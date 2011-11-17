@@ -1,16 +1,18 @@
 package eastyle.gopdefence.model.attack;
 
+import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.sprite.Sprite;
-
 import eastyle.gopdefence.GameActivity;
-import eastyle.gopdefence.controller.TowerController;
 import eastyle.gopdefence.logic.Target;
 import eastyle.gopdefence.logic.Tower;
 import eastyle.gopdefence.view.GameZone;
 
-public class PointHomingAttack {
+public class PointHomingAttack implements AttackTypeInterface {
+	public PointHomingAttack() {
 
-	public PointHomingAttack(final Tower tower, final Target target) {
+	}
+
+	public void attack(final Tower tower, final Target target) {
 		new Thread(new Runnable() {
 
 			@Override
@@ -21,10 +23,19 @@ public class PointHomingAttack {
 				GameZone.gameMap.attachChild(projectile);
 				GameZone.globalProjectile.add(projectile);
 
-				float step = 8;
+				float step = 1f;
 				while (true) {
+					if (GameZone.isDestroy)
+						break;
 					try {
-						Thread.sleep(100);
+						int sleepStep = 0;
+						while (sleepStep < (10 / GameZone.gameSpeed)) {
+							sleepStep += 5;
+							GameZone.isPause();
+							Thread.sleep(5);
+							// FIXME recount for stepsleep
+						}
+						// Thread.sleep(100);
 						if (projectile.getX() > target.getX()) {
 							projectile.setPosition(projectile.getX() - step,
 									projectile.getY());
@@ -45,20 +56,20 @@ public class PointHomingAttack {
 									projectile.getY() + step);
 						}
 
-						if (TowerController.getDistance(projectile, tower) > tower
+						if (getDistance(projectile, tower) > tower
 								.getAttackRange() || target.isDestroied) {
 							projectile.setVisible(false);
 							tower.setTargetCaptured(false);
 							break;
 						}
 
-						if (TowerController.getDistance(projectile, target) < 10) {
+						if (getDistance(projectile, target) < 10) {
 							projectile.setVisible(false);
 
 							target.setHeals(target.getHeals()
 									- tower.getAttackDamage());
 							target.viewHeals();
-
+							
 							if (target.getHeals() <= 0) {
 								target.killTarget();
 								tower.setTargetCaptured(false);
@@ -71,5 +82,15 @@ public class PointHomingAttack {
 				}
 			}
 		}).start();
+	}
+
+	public float getDistance(final IEntity aTtower, final IEntity aTarget) {
+		return (float) Math.sqrt(Math.pow((aTtower.getX() - aTarget.getX()), 2)
+				+ Math.pow((aTtower.getY() - aTarget.getY()), 2));
+	}
+
+	@Override
+	public void attackTarget(Tower tower, Target target) {
+		attack(tower, target);
 	}
 }
